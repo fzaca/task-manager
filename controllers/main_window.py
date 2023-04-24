@@ -1,5 +1,8 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QCheckBox, QLabel
+from PySide6.QtWidgets import (
+    QMainWindow, QWidget, QHBoxLayout, QCheckBox, 
+    QLabel, QPushButton, QSpacerItem, QSizePolicy
+)
 
 from views.main_window_ui import Ui_MainWindow
 
@@ -35,6 +38,7 @@ class MainWindowForm(QMainWindow, Ui_MainWindow):
             self.tasks_layout.takeAt(0).widget().deleteLater()
         rows = self.cursor.execute('SELECT * FROM task').fetchall()
         for i, task in enumerate(rows):
+            task_id = task[0]
             date = task[1]
             description = task[2]
             completed = task[3]
@@ -42,21 +46,57 @@ class MainWindowForm(QMainWindow, Ui_MainWindow):
             task_widget = QWidget()
             task_layout = QHBoxLayout(task_widget)
             task_layout.setContentsMargins(0, 0, 0, 0)
-            
-            check_box = QCheckBox()
-            task_layout.addWidget(check_box)
-            
-            label = QLabel(description)
-            task_layout.addWidget(label)
 
-            task_layout.setAlignment(Qt.AlignLeft)
+            checkbox = QCheckBox()
+            checkbox.setChecked(completed)
+            checkbox.setObjectName(f"task_{task_id}")
+            checkbox.stateChanged.connect(self.update_task)
+
+            description_label = QLabel(description)
+            description_label.setObjectName(f"description_{task_id}")
+            if completed:
+                description_label.setStyleSheet("color: gray; text-decoration: line-through;")
+
+            delete_button = QPushButton("Eliminar")
+            delete_button.setObjectName(f"delete_{task_id}")
+            delete_button.clicked.connect(self.delete_task)
+
+            task_layout.addWidget(checkbox)
+            task_layout.addWidget(description_label)
+
+            spacer_item = QSpacerItem(10000, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+            task_layout.addItem(spacer_item)
+
+            task_layout.addWidget(delete_button)
+            task_layout.addStretch(1)
 
             task_widget.setStyleSheet('''
-                background-color: #FABD2F;
+                background-color: #fabd2f;
+                padding: 10px;
                 border-radius: 5px;
-                padding-left: 20px;
             ''')
-            task_widget.setMinimumHeight(40)
-            task_widget.setMaximumHeight(40)
 
             self.tasks_layout.addWidget(task_widget)
+
+    def update_task(self):
+        checkbox = self.sender()
+        task_id = int(checkbox.objectName().split("_")[1])
+        completed = checkbox.isChecked()
+        description_label = self.findChild(QLabel, f"description_{task_id}")
+        if completed:
+            description_label.setStyleSheet("color: gray; text-decoration: line-through;")
+        else:
+            description_label.setStyleSheet("text-decoration: none;")
+        self.cursor.execute('''
+            UPDATE task SET completed = ? WHERE id = ?
+        ''', (completed, task_id))
+        self.conn.commit()
+
+    def delete_task(self):
+        button = self.sender()
+        task_id = int(button.objectName().split("_")[1])
+        self.cursor.execute('''
+            DELETE FROM task WHERE id = ?
+        ''', (task_id,))
+        self.conn.commit()
+        self.render_tasks()
