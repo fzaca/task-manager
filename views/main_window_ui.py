@@ -36,13 +36,15 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scroll_area.sizePolicy().hasHeightForWidth())
         self.scroll_area.setSizePolicy(sizePolicy)
-        self.scroll_area.setStyleSheet(u"border: 0px;")
+        self.scroll_area.setStyleSheet(u"QScrollArea{\n"
+"	border: 2px solid #ccc; border-radius: 5px; padding: 10px;\n"
+"}")
         self.scroll_area.setLineWidth(0)
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 782, 536))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 758, 512))
         self.tasks_layout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.tasks_layout.setSpacing(6)
         self.tasks_layout.setObjectName(u"tasks_layout")
@@ -71,7 +73,12 @@ class Ui_MainWindow(object):
         sizePolicy1.setHeightForWidth(self.add_button.sizePolicy().hasHeightForWidth())
         self.add_button.setSizePolicy(sizePolicy1)
         self.add_button.setMinimumSize(QSize(70, 30))
-        self.add_button.setStyleSheet(u"background-color: #b8bb36; border-radius: 5px;")
+        self.add_button.setStyleSheet(u"QPushButton{\n"
+"	background-color: #b8bb36; border-radius: 5px;\n"
+"}\n"
+"QPushButton:hover{\n"
+"	background-color: #98971a; border-radius: 5px;\n"
+"}")
 
         self.horizontalLayout.addWidget(self.add_button)
 

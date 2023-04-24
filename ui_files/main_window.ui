@@ -27,7 +27,9 @@
        </sizepolicy>
       </property>
       <property name="styleSheet">
-       <string notr="true">border: 0px;</string>
+       <string notr="true">QScrollArea{
+	border: 2px solid #ccc; border-radius: 5px; padding: 10px;
+}</string>
       </property>
       <property name="lineWidth">
        <number>0</number>
@@ -43,8 +45,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>782</width>
-         <height>536</height>
+         <width>758</width>
+         <height>512</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="tasks_layout">
@@ -68,7 +70,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="" native="true">
+     <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
        <string notr="true">background-color: #d3869b;
 border-radius: 5px;</string>
@@ -114,7 +116,12 @@ border-radius: 5px;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: #b8bb36; border-radius: 5px;</string>
+          <string notr="true">QPushButton{
+	background-color: #b8bb36; border-radius: 5px;
+}
+QPushButton:hover{
+	background-color: #98971a; border-radius: 5px;
+}</string>
          </property>
          <property name="text">
           <string>Add</string>
