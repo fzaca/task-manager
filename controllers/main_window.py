@@ -71,9 +71,12 @@ class MainWindowForm(QMainWindow, Ui_MainWindow):
             task_layout.addStretch(1)
 
             task_widget.setStyleSheet('''
-                background-color: #fabd2f;
-                padding: 10px;
-                border-radius: 5px;
+                QWidget{
+                    background-color: #ccc;
+                    padding: 10px;
+                    border-radius: 5px;
+                    color: gray;
+                }
             ''')
 
             self.tasks_layout.addWidget(task_widget)
@@ -86,7 +89,7 @@ class MainWindowForm(QMainWindow, Ui_MainWindow):
         if completed:
             description_label.setStyleSheet("color: gray; text-decoration: line-through;")
         else:
-            description_label.setStyleSheet("text-decoration: none;")
+            description_label.setStyleSheet("color: gray; text-decoration: none;")
         self.cursor.execute('''
             UPDATE task SET completed = ? WHERE id = ?
         ''', (completed, task_id))
